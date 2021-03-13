@@ -1,0 +1,24 @@
+extends layout 
+
+block content 
+    template#js-infowindow 
+        h2 Info on Earthquake
+        p <strong>Date:</strong> <span id='js-date'></span>
+        p <strong>Time:</strong> <span id='js-time'></span>
+        p <strong>Depth:</strong> <span id='js-depth'></span>
+        p <strong>Magnitude:</strong> <span id='js-mag'></span>
+
+
+    header
+        //- AIzaSyCPplJYzO2yx7D9XoFrlgP4f2ypdSa5Neo
+        input(type='text' name='place' id='js-place' placeholder='Enter place')
+        button(type='button' id='js-place--button') Search 
+    
+    main 
+        h1#js-placename Earthquakes
+        h2#js-placeaddress Search a place and find the 10 most recent earthquakes
+        div#js-map
+
+    div#js-result
+
+    script(async src=`https://maps.googleapis.com/maps/api/js?key=${key}&callback=initMap`)
