@@ -5,6 +5,12 @@ function searchPlace() {
     const placename = document.getElementById('js-placename');
     const placeaddress = document.getElementById('js-placeaddress');
     const resultDiv = document.getElementById('js-result');
+    const earthquakeCount = document.getElementById('js-info-count');
+    const infoPlace = document.getElementById('js-info-place');
+    const infoAddress = document.getElementById('js-info-address');
+    const loading = document.querySelectorAll('.loading');
+
+    loading.forEach(loader => loader.style.display = 'flex');
     
     const url = '/xhr/placeautocomplete';
 
@@ -12,10 +18,14 @@ function searchPlace() {
     xhr.open('POST', url, true);
 
     xhr.onload = () => {
+        loading.forEach(loader => loader.style.display = 'none');
         if (xhr.status === 200){
             const data = JSON.parse(xhr.responseText);
             placename.innerText = data.name;
             placeaddress.innerText = data.formatted_address;
+            infoPlace.innerText = data.name;
+            infoAddress.innerText = data.formatted_address;
+            earthquakeCount.innerText = data.earthquakes.length;
 
             updateMap(data.location, data.boundingBox, data.earthquakes);
 
@@ -53,9 +63,7 @@ function initMap() {
     map = new google.maps.Map(document.getElementById('js-map'), {
         center: { lat: 19.43, lng: -99.13 },
         ...mapParams
-    });
-
-    
+    }); 
 };
 
 function updateMap(location, boundingBox, earthquakes) {
@@ -65,6 +73,7 @@ function updateMap(location, boundingBox, earthquakes) {
         ...mapParams
     });
 
+    infoWindows = [];
     markers = earthquakes.map(earthquake => {
         const dateTime = new Date(earthquake.datetime);
         const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
@@ -87,6 +96,22 @@ function updateMap(location, boundingBox, earthquakes) {
             content: template
         });
 
-        marker.addListener('click', _ => infoWindow.open(map, marker));
+        infoWindows.push(infoWindow);
+
+        marker.addListener('click', _ => {
+            infoWindows.forEach(window => window.close());
+            document.getElementById('js-info-date').innerText = date;
+            document.getElementById('js-info-time').innerText = time;
+            document.getElementById('js-info-depth').innerText = `${earthquake.depth} meters`;
+            document.getElementById('js-info-mag').innerText = `${earthquake.magnitude}`;
+            infoWindow.open(map, marker);
+        });
+
+        infoWindow.addListener('closeclick', _ => {
+            document.getElementById('js-info-date').innerText = 'None Selected';
+            document.getElementById('js-info-time').innerText = 'None Selected';
+            document.getElementById('js-info-depth').innerText = 'None Selected';
+            document.getElementById('js-info-mag').innerText = 'None Selected';
+        });
     });
 };

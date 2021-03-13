@@ -10,14 +10,43 @@ block content
 
 
     header
-        //- AIzaSyCPplJYzO2yx7D9XoFrlgP4f2ypdSa5Neo
-        input(type='text' name='place' id='js-place' placeholder='Enter place')
-        button(type='button' id='js-place--button') Search 
+        nav
+            h1.nav__logo earthquake
+            .nav__search
+                input(type='search' name='place' id='js-place' placeholder='Search place')
+                button(type='button' id='js-place--button') Search 
     
     main 
-        h1#js-placename Earthquakes
-        h2#js-placeaddress Search a place and find the 10 most recent earthquakes
-        div#js-map
+        .info
+            p.info__title Info on Earthquakes
+            p.info__helptext Search a place and find the 10 most recent earthquakes in the area
+            hr.info__divider
+            p.info__place#js-info-place World
+            p.info__address#js-info-address Top 10 in the last 12 months
+            .info__earthquakes 
+                strong.info__category Earthquakes Found
+                span#js-info-count 10
+            .info__earthquakes 
+                strong.info__category Earthquake Date
+                span#js-info-date None selected
+            .info__earthquakes 
+                strong.info__category Earthquake Time
+                span#js-info-time None selected
+            .info__earthquakes 
+                strong.info__category Earthquake Depth
+                span#js-info-depth None selected
+            .info__earthquakes 
+                strong.info__category Earthquake Magnitude
+                span#js-info-mag None selected
+            .loading 
+                .loading__animation
+        .map
+            .map__info
+                p#js-placename World
+                p#js-placeaddress World
+            div#js-map
+            .loading 
+                .loading__animation
 
     div#js-result
 
