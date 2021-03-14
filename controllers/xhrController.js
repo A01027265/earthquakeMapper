@@ -8,54 +8,44 @@ exports.placeAutocomplete = async (req, res, next) => {
         const placeData = {
             name: 'World',
             formatted_address: 'Top 10 in the last 12 months',
-            location: {
-                lat: 19.43,
-                lng: -99.13
-            },
-            boundingBox: {
-                north: 90,
-                south: -90,
-                east: 180,
-                west: -180
-            }
+            location: { lat: 19.43, lng: -99.13 },
+            boundingBox: { north: 90, south: -90, east: 180, west: -180 }
         };
-
+    
         const geonamesURL = 'http://api.geonames.org/earthquakesJSON';
         const today = new Date();
         const date = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
         const earthquakeParams = {
             ...placeData.boundingBox,
             date,
-            minMagnitude: 6.5,
+            minMagnitude: 6,
+            maxRows: 300,
             username: process.env.GEONAMES_USERNAME
         };
-        
+    
         let earthquakeAPI;
-        let tempEarthquakeAPI;
-        let apiEnd = false;
-
-        while (apiEnd === false) {
-            try {
-                tempEarthquakeAPI = await axios.get(geonamesURL, { params: earthquakeParams });
-            } catch (error) {
-                res.status(500).send('Internal Server Error');
-                console.error('Error: ', error);
-                return;
-            }
-
-            const tmpEQ = tempEarthquakeAPI.data.earthquakes;
-            const lTmpEQ = new Date(tmpEQ[tmpEQ-1].datetime);
-            const yearAgo = today.setDate(today.getMonth()-12);
-            if (today < lTmpEQ) earthquakeParams.minMagnitude += 0.5;
-           
+        try {
+            earthquakeAPI = await axios.get(geonamesURL, { params: earthquakeParams });
+        } catch (error) {
+            res.status(500).send('Internal Server Error');
+            console.error('Error: ', error);
+            return;
         }
+    
+        const earthquakeData = earthquakeAPI.data.earthquakes;
+    
+        const lastYear = today;
+        lastYear.setFullYear(lastYear.getFullYear() - 1);
+    
+        const filteredEarthquakes = earthquakeData.filter(earthquake => new Date(earthquake.datetime) >= lastYear);
+        const sortedEarthquakes = filteredEarthquakes.sort(( a, b) => b.magnitude - a.magnitude);
+        const topEarthquakes = sortedEarthquakes.map(x => x);
+        topEarthquakes.splice(10);
 
-        const earthquakeData = earthquakeAPI.data;
-        placeData.earthquakes = earthquakeData.earthquakes;
+        placeData.earthquakes = topEarthquakes;
 
         res.status(200).send(JSON.stringify(placeData));
-
-
+        return;
     }
 
     const placeParams = {
@@ -67,6 +57,7 @@ exports.placeAutocomplete = async (req, res, next) => {
             'geometry',
             'formatted_address'
         ],
+        language: 'en',
         key: process.env.GOOGLE_API_BACK
     };
     
@@ -99,8 +90,8 @@ exports.placeAutocomplete = async (req, res, next) => {
         return;
     }
 
-    if (!placeAPI || !placeAPI.data) {
-        res.status(204).send('No Content');
+    if (!placeAPI || !placeAPI.data || !placeAPI.data.candidates[0]) {
+        res.status(400).send('Invalid Place');
         return;
     }
 
@@ -137,4 +128,10 @@ exports.placeAutocomplete = async (req, res, next) => {
     placeData.earthquakes = earthquakeData.earthquakes;
 
     res.status(200).send(JSON.stringify(placeData));
+};
+
+exports.test = async (req, res, next) => {
+    
+    
+    res.json(topEarthquakes)
 };

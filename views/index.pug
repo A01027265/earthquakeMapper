@@ -48,6 +48,12 @@ block content
             .loading 
                 .loading__animation
 
-    div#js-result
+    .modalbg 
+        .modal
+            .modal__header
+                p.modal__title Error
+                i.fas.fa-times.modal__exit
+            #js-result
+                p No content
 
     script(async src=`https://maps.googleapis.com/maps/api/js?key=${key}&callback=initMap`)

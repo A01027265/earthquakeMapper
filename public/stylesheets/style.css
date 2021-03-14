@@ -52,7 +52,7 @@ nav {
   color: var(--jam);
 }
 
-.nav__search input:focus {
+.nav__search input:focus, .nav__search input:hover {
   outline: none;
   position: relative;
   top: -5px;
@@ -97,6 +97,7 @@ main {
   box-shadow: 0 15px 25px rgba(0,0,0,0.3);
   position: relative;
   overflow: hidden;
+  text-shadow: 3px 3px 5px rgba(0,0,0,0.3);
 }
 
 .info__title {
@@ -167,6 +168,7 @@ main {
   padding: 0.5em 1em;
   font-size: 1.2rem;
   color: #fff;
+  text-shadow: 5px 5px 5px rgba(0,0,0,0.3);
 }
 
 .map__info p {
@@ -217,4 +219,47 @@ main {
 @-webkit-keyframes spin {
   0% { -webkit-transform: rotate(0deg); }
   100% { -webkit-transform: rotate(360deg); }
+}
+
+.modalbg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.7);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  display: none;
+}
+
+.modal {
+  width: 40%;
+  background-color: #c40c0c;
+  border-radius: 10px;
+  padding: 1.5em 1em;
+}
+
+.modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 1.2rem;
+  color: #fff;
+}
+
+.modal__title {
+  margin: 0;
+  font-weight: bold;
+}
+
+.modal__exit {
+  cursor: pointer;
+}
+
+#js-result {
+  color: #fff;
 }
