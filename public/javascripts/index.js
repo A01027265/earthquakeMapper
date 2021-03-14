@@ -22,13 +22,6 @@ function searchPlace() {
     const xhr = new XMLHttpRequest();
     xhr.open('POST', url, true);
 
-    const xhrDict = {
-        204: 'No Results',
-        400: 'Invalid Place',
-        503: 'Service Unavailable',
-        500: ''
-    }
-
     xhr.onload = () => {
         loading.forEach(loader => loader.style.display = 'none');
         if (xhr.status === 200){
