@@ -5,9 +5,7 @@ var router = express.Router();
 const xhrController = require('../controllers/xhrController');
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express', key: process.env.GOOGLE_API_FRONT });
-});
+router.get('/', (req, res, next) => res.render('index', { title: 'earthquakeMapper', key: process.env.GOOGLE_API_FRONT}));
 
 router.post('/xhr/placeautocomplete', xhrController.placeAutocomplete)
 
