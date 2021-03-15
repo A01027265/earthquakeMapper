@@ -9,8 +9,6 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express', key: process.env.GOOGLE_API_FRONT });
 });
 
-router.get('/test', xhrController.test);
-
 router.post('/xhr/placeautocomplete', xhrController.placeAutocomplete)
 
 module.exports = router;

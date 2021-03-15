@@ -86,7 +86,7 @@ main {
   margin: 2em 5%;
   display: grid;
   grid-template-columns: 25% 70%;
-  grid-column-gap: 5%;
+  grid-gap: 5%;
 }
 
 .info {
@@ -151,6 +151,10 @@ main {
 
 .info__category {
   color: var(--jam);
+}
+
+.info__earthquakes span {
+  text-align: right;
 }
 
 .map {
@@ -262,4 +266,35 @@ main {
 
 #js-result {
   color: #fff;
+}
+
+@media (min-width: 0px) and (orientation: portrait) {
+  nav {
+    flex-direction: column;
+  }
+
+  main {
+    grid-template-columns: 100%;
+    margin-bottom: 7em;
+  }
+}
+
+@media (min-width: 768px) and (orientation: portrait) {
+  nav {
+    flex-direction: row;
+  }
+}
+
+@media (min-width: 0px) and (orientation: landscape) {
+  main {
+    grid-template-columns: 100%;
+    margin-bottom: 7em;
+  }
+}
+
+@media (min-width: 1024px) and (orientation: landscape) {
+  main {
+    grid-template-columns: 25% 70%;
+    margin-bottom: 0;
+  }
 }
